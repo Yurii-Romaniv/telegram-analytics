@@ -46,6 +46,12 @@ public class AnalyticsAdapter extends ArrayAdapter<AnalyticsDTO> {
 
             TextView reactionTimeView = convertView.findViewById(R.id.reactionTime);
             reactionTimeView.setText(analyticsDTO.reactionTime + " s");
+
+            TextView numberOfStartedConversesView = convertView.findViewById(R.id.numberOfStartedConverses);
+            numberOfStartedConversesView.setText(Integer.toString(analyticsDTO.numberOfStartedConverses));
+
+            TextView numberOfSymbols = convertView.findViewById(R.id.numberOfSymbols);
+            numberOfSymbols.setText(String.valueOf(analyticsDTO.numberOfSymbols));
         }
 
         return convertView;

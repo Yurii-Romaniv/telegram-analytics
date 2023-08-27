@@ -51,6 +51,7 @@ public class ParsedMessage {
         try {
             this.text = (String) text;
         } catch (Exception ignored) {
+            this.text = "";
         }
     }
 }

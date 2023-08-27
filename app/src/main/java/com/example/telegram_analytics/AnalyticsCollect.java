@@ -38,11 +38,14 @@ public class AnalyticsCollect {
                 int reactionTime = message.getUnixTime() - lastMessageTime[0];
                 if (reactionTime < maxIgnoreTime) {
                     analyticsDTO.reactionTime += reactionTime;
+                } else {
+                    analyticsDTO.numberOfStartedConverses++;
                 }
                 lastMessageTime[0] = message.getUnixTime();
             }
 
-            analyticsDTO.numberOfMessages += 1;
+            analyticsDTO.numberOfMessages++;
+            analyticsDTO.numberOfSymbols += message.getText().length();
             lastUserId[0] = analyticsDTO.id;
 
         });

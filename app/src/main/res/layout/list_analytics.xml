@@ -47,4 +47,34 @@
             style="@style/fieldValue" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/fieldTitles"
+            android:text="Conversations Started:"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/numberOfStartedConverses"
+            style="@style/fieldValue" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/fieldTitles"
+            android:text="Symbols typed:"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/numberOfSymbols"
+            style="@style/fieldValue" />
+    </LinearLayout>
+
 </LinearLayout>
