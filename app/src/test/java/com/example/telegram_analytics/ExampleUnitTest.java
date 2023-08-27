@@ -1,4 +1,4 @@
-package com.example.telegramanalytics;
+package com.example.telegram_analytics;
 
 import org.junit.Test;
 
