@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 
@@ -25,7 +26,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ParsedChat parsedChat;
+
     private ListView listView;
+
+    private EditText maxIgnoreHoursInput;
+
+    private int maxIgnoreHours = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +40,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = findViewById(R.id.usersList);
+        maxIgnoreHoursInput = findViewById(R.id.maxIgnoreHours);
         Button filePickerButton = findViewById(R.id.filePickerButton);
 
+        maxIgnoreHoursInput.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus) {
+                String value = String.valueOf(maxIgnoreHoursInput.getText());
+                int integerValue = Integer.parseInt(value);
+                if (integerValue != maxIgnoreHours) {
+                    maxIgnoreHours = integerValue;
+                    viewResult();
+                }
+
+            }
+        });
 
         filePickerButton.setOnClickListener(view -> openFile());
     }
@@ -57,19 +76,22 @@ public class MainActivity extends AppCompatActivity {
                 Uri uri = data.getData();
 
                 try {
-                    ParsedChat parsedChat = DataExtractor.getParsedChat(MainActivity.this, uri);
-                    AnalyticsCollect analyticsCollect = new AnalyticsCollect(parsedChat.getMessages());
-                    List<AnalyticsDTO> analyticsDTOs = analyticsCollect.getAnalytics();
-
-                    ArrayAdapter<AnalyticsDTO> adapter = new AnalyticsAdapter(this, R.layout.list_analytics, analyticsDTOs);
-                    listView.setAdapter(adapter);
-
+                    parsedChat = DataExtractor.getParsedChat(MainActivity.this, uri);
+                    viewResult();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
     });
+
+    private void viewResult() {
+        AnalyticsCollect analyticsCollect = new AnalyticsCollect(parsedChat.getMessages(), maxIgnoreHours);
+        List<AnalyticsDTO> analyticsDTOs = analyticsCollect.getAnalytics();
+
+        ArrayAdapter<AnalyticsDTO> adapter = new AnalyticsAdapter(this, R.layout.list_analytics, analyticsDTOs);
+        listView.setAdapter(adapter);
+    }
 }
 
 

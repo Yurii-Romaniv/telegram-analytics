@@ -18,6 +18,41 @@
             android:text="add .json file"
             tools:ignore="HardcodedText" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:layout_gravity="bottom"
+                android:text="the time exceeding which is considered the end of the conversation and not an ignore">
+            </TextView>
+
+            <EditText
+                android:id="@+id/maxIgnoreHours"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:text="6"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:gravity="bottom"
+                android:layout_gravity="bottom"
+                android:layout_height="wrap_content"
+                android:maxLength="2"
+                android:layout_weight="1"
+                android:text="hours">
+            </TextView>
+        </LinearLayout>
+
         <ListView
             android:id="@+id/usersList"
             android:layout_width="match_parent"

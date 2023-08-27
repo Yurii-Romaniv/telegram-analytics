@@ -9,14 +9,15 @@ import java.util.Objects;
 
 public class AnalyticsCollect {
 
-    private final int MAX_IGNORE_TIME = 6 * 60 * 60;
+    private final int maxIgnoreTime;
 
     private final List<ParsedMessage> parsedMessages;
 
     private final List<AnalyticsDTO> analyticsDTOs = new ArrayList<>();
 
-    public AnalyticsCollect(List<ParsedMessage> parsedMessages) {
+    public AnalyticsCollect(List<ParsedMessage> parsedMessages, Integer maxIgnoreTime) {
         this.parsedMessages = parsedMessages;
+        this.maxIgnoreTime = maxIgnoreTime * 60 * 60;
     }
 
     public List<AnalyticsDTO> getAnalytics() {
@@ -35,13 +36,13 @@ public class AnalyticsCollect {
 
             if (!Objects.equals(lastUserId[0], analyticsDTO.id)) {
                 int reactionTime = message.getUnixTime() - lastMessageTime[0];
-                if (reactionTime < MAX_IGNORE_TIME) {
+                if (reactionTime < maxIgnoreTime) {
                     analyticsDTO.reactionTime += reactionTime;
                 }
+                lastMessageTime[0] = message.getUnixTime();
             }
 
             analyticsDTO.numberOfMessages += 1;
-            lastMessageTime[0] = message.getUnixTime();
             lastUserId[0] = analyticsDTO.id;
 
         });
