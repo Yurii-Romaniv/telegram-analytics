@@ -1,6 +1,5 @@
 package com.example.telegram_analytics;
 
-import static android.app.PendingIntent.getActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -42,19 +41,26 @@ public class AnalyticsAdapter extends ArrayAdapter<AnalyticsDTO> {
 
     private void processData() {
         List<TimePointData> timePointDataList = analyticsDTO.timePointDataList;
-        reactionDataPoints = new DataPoint[timePointDataList.size()];
-        messagesDataPoints = new DataPoint[timePointDataList.size()];
+        reactionDataPoints = new DataPoint[timePointDataList.size() * 2];
+        messagesDataPoints = new DataPoint[timePointDataList.size() * 2];
+        long prevPointTime = timePointDataList.get(0).getUnixTimeInMs();
 
         analyticsDTO.tempNumberOfMessages = 0;
         analyticsDTO.tempReactionTime = 0;
 
         for (int i = 0; i < timePointDataList.size(); i++) {
             TimePointData timePointData = timePointDataList.get(i);
-            reactionDataPoints[i] = new DataPoint(timePointData.getUnixTimeInMs(), timePointData.getReactionTime());
-            messagesDataPoints[i] = new DataPoint(timePointData.getUnixTimeInMs(), timePointData.getNumberOfMessages());
+            int doubledIterator = i * 2;
+            reactionDataPoints[doubledIterator + 1] = new DataPoint(timePointData.getUnixTimeInMs(), timePointData.getReactionTime());
+            messagesDataPoints[doubledIterator + 1] = new DataPoint(timePointData.getUnixTimeInMs(), timePointData.getNumberOfMessages());
+
+            reactionDataPoints[doubledIterator] = new DataPoint(prevPointTime, reactionDataPoints[doubledIterator + 1].getY());
+            messagesDataPoints[doubledIterator] = new DataPoint(prevPointTime, messagesDataPoints[doubledIterator + 1].getY());
 
             analyticsDTO.tempNumberOfMessages += timePointData.getNumberOfMessages();
             analyticsDTO.tempReactionTime += timePointData.getReactionTime();
+
+            prevPointTime = timePointData.getUnixTimeInMs();
         }
 
         analyticsDTO.tempReactionTime /= timePointDataList.size();
